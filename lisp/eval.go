@@ -1,9 +1,5 @@
 package lisp
 
-import(
-	"fmt"
-)
-
 func Eval(ast *Node) int {
 	var op []byte 
 	var left, right, result int
