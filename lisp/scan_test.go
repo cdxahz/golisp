@@ -1,11 +1,10 @@
-package mylang
+package lisp
 
 import(
     "testing"
     "fmt"
 )
 
-//FIX ME: the last token can't be parse
 func TestScan(t *testing.T){
 
     source := "(* 10 (+ 1 2.3))"

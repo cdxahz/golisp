@@ -1,4 +1,4 @@
-package mylang
+package lisp
 
 import (
 	"fmt"
