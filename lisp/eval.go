@@ -10,7 +10,6 @@ func Eval(ast *Node) int {
 	if ast == nil {
 		panic("invalid ast")
 	}
-	DEBUG("left: ", ast.left.root.Value)
 	op = ast.root.Value
 	if ast.root.Type == OP {
 		if ast.left != nil {
@@ -35,7 +34,6 @@ func Eval(ast *Node) int {
 		if var_i == 0 {
 			var_i = '0'
 		}
-		DEBUG("INFO " ,op, left, right)
 		result = eval(string(op), left, right)
 		return result
 	}
@@ -43,9 +41,6 @@ func Eval(ast *Node) int {
 }
 
 func eval(op string, left, right int) int{
-
-	fmt.Println("eval:", op, left, right)
-
 	switch{
 	case op == "+":
 		return left + right
@@ -66,7 +61,5 @@ func toInt(val []byte) int{
 		factor := 10
 		result = result * factor + int(v - '0')
 	}
-	DEBUG("before: ", val)
-	DEBUG("after: ", int(result) - int('0'))
 	return int(result)
 }

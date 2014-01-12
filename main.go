@@ -2,15 +2,35 @@ package main
 
 import(
 	"fmt"
+	"os"
+	"flag"
+	"bufio"
+
 	"github.com/cdxahz/golisp/lisp"
 )
 
+var file = flag.String("file", "sample.lisp", "help message for file")
+
 func main(){
-	var source string
-	fmt.Println("Please input the expression:")
-	fmt.Scan(source)
-	scanner := lisp.NewScanner(source)
-	ast := lisp.Parse(scanner.Tokens())
-	fmt.Println(lisp.Eval(ast))
+
+	flag.Parse()
+	f, err := os.Open(*file)
+	defer f.Close()
+
+	if err != nil{
+		panic(err)
+	}
+	
+	reader := bufio.NewReader(f)
+	for {
+		line, _, _ := reader.ReadLine()
+		if len(line) <= 0{
+			break
+		}
+		scanner := lisp.NewScanner(string(line))
+		ast := lisp.Parse(scanner.Tokens())
+		fmt.Println(string(line), " = ", lisp.Eval(ast))
+
+	}
 
 }
