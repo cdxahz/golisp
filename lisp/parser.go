@@ -28,7 +28,27 @@ func Parse(tokens []Token) *Node {
 			child := new(Node)
 			if current.left == nil {
 				current.left = child
-			} else {
+			} else if current.right == nil{
+				current.right = child
+			}else{
+				newRoot := new(Node)
+				newRoot.left = current
+				if current == root{
+					root = newRoot
+				}
+				if current.parent != nil{
+					if current == current.parent.left{
+						current.parent.left = newRoot
+					}else if current == current.parent.right{
+						current.parent.right = newRoot
+					}
+					newRoot.parent = current.parent
+					current.parent = newRoot
+				}
+				//copy the op
+				newRoot.root = current.root
+			
+				current = newRoot
 				current.right = child
 			}
 			if token.Type == NUMBER {
