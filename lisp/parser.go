@@ -19,9 +19,9 @@ func Parse(tokens []Token) *Node {
 	root = current
 	for _, token := range tokens {
 
-		if token.Type == OP {
+		if token.Type == OP || isAssign(token){
 			current.root = token
-		} else if token.Type == NUMBER || token.Type == LEFT {
+		} else if token.Type == NUMBER || token.Type == LEFT || token.Type == WORD{
 			if count == 0 {
 				continue
 			}
@@ -38,9 +38,13 @@ func Parse(tokens []Token) *Node {
 			if token.Type == LEFT {
 				current = child
 			}
+			if token.Type == WORD {
+				child.root = token
+			}
 		} else if token.Type == RIGHT {
 			current = current.parent
 		} else {
+			DEBUG("current token : ", token)
 			panic("not support")
 		}
 		count = count + 1
@@ -98,6 +102,12 @@ func Gen(ast *Node) string {
 		result = "_var" + string(var_i)
 		fmt.Println(op, left, right, result)
 		return result
+	}else if isAssign(ast.root){
+		fmt.Println("=", string(ast.left.root.Value), string(ast.right.root.Value), result)
 	}
 	return string(ast.root.Value)
+}
+
+func isAssign(token Token) bool{
+	return token.Type == WORD && string(token.Value) == "setf"
 }

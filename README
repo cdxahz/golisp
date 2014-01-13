@@ -7,3 +7,6 @@ Op:
 
 Type:
 	Integer
+
+Keywords:
+	setf

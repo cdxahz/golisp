@@ -1,5 +1,11 @@
 package lisp
 
+import(
+	"fmt"
+)
+
+var table map[string] interface{}
+
 func Eval(ast *Node) int {
 	var op []byte 
 	var left, right, result int
@@ -32,6 +38,9 @@ func Eval(ast *Node) int {
 		}
 		result = eval(string(op), left, right)
 		return result
+	}else if isAssign(ast.root){
+		AddToTable(string(ast.left.root.Value), toInt(ast.right.root.Value))
+		return toInt(ast.right.root.Value)
 	}
 	return toInt(ast.root.Value)
 }
@@ -58,4 +67,21 @@ func toInt(val []byte) int{
 		result = result * factor + int(v - '0')
 	}
 	return int(result)
+}
+
+func AddToTable(key string, v interface{}) {
+	if table == nil{
+		table = make(map[string] interface{})	
+	}
+
+	table[key] = v
+}
+
+func PrintTable() {
+	fmt.Println("[print the table info]:")
+	if table != nil{
+		for key, value := range table{
+			fmt.Println(key, " = ", value)
+		}
+	}
 }
