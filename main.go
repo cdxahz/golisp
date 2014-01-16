@@ -6,8 +6,7 @@ import(
 	"flag"
 	"bufio"
 
-	_ "github.com/cdxahz/golisp/lisp"
-	"./lisp"
+	"github.com/cdxahz/golisp/lisp"
 )
 
 var file = flag.String("file", "sample.lisp", "help message for file")
