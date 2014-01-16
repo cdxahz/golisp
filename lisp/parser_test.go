@@ -17,6 +17,10 @@ func TestParse(t *testing.T) {
 
 	ast := Parse(tokens)
 	PrintAst(ast)
+
+	if string(ast.root.Value) != "*"{
+		t.Fail()
+	}
 	fmt.Println()
 
 	fmt.Println("gen the instructions")

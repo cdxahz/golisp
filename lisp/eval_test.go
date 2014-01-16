@@ -12,4 +12,8 @@ func TestEval(t *testing.T){
 	ast := Parse(scanner.Tokens())
 
 	fmt.Println("test eval :", Eval(ast))
+
+	if Eval(ast) != 35{
+		t.Fail()
+	}
 }
