@@ -4,14 +4,6 @@ import (
 	"fmt"
 )
 
-type Node struct {
-	root   Token
-	left   *Node
-	right  *Node
-	name   string
-	parent *Node
-}
-
 func Parse(tokens []Token) *Node {
 	var current, root *Node
 	count := 0
