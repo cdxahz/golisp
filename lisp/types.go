@@ -8,16 +8,16 @@ type Node struct {
 	parent *Node
 }
 
-type Scope struct{
+type Scope struct {
 	Enverment map[string]interface{}
-	name string
+	name      string
 }
-type Statement struct{
+type Statement struct {
 	node *Node
 	name string
 }
-type Function struct{
-	name string
+type Function struct {
+	name  string
 	scope Scope
-	stmt *Statement
+	stmt  *Statement
 }

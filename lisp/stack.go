@@ -1,12 +1,12 @@
 package lisp
 
-type Stack struct{
-	top interface{}
-	size int
+type Stack struct {
+	top   interface{}
+	size  int
 	items []interface{}
 }
 
-func New() *Stack{
+func New() *Stack {
 	return &Stack{
 		nil,
 		0,
@@ -14,30 +14,29 @@ func New() *Stack{
 	}
 }
 
-func (stack *Stack) Push(v interface{}){
+func (stack *Stack) Push(v interface{}) {
 	stack.items = append(stack.items, v)
 	stack.size += 1
 }
 
-func (stack *Stack) Pop() interface{}{
+func (stack *Stack) Pop() interface{} {
 	top := stack.Top()
-	stack.items[stack.Size() - 1] = nil
+	stack.items[stack.Size()-1] = nil
 	stack.size -= 1
 	return top
 }
 
-func (stack *Stack) Top() interface{}{
-	return stack.items[stack.Size() - 1]
+func (stack *Stack) Top() interface{} {
+	return stack.items[stack.Size()-1]
 }
 
-func (stack *Stack) Empty() bool{
+func (stack *Stack) Empty() bool {
 	return stack.size == 0
 }
 
-func (stack *Stack) Size() int{
-	if stack == nil{
+func (stack *Stack) Size() int {
+	if stack == nil {
 		return 0
 	}
 	return stack.size
 }
-

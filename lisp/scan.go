@@ -14,7 +14,7 @@ const (
 	INVALID
 )
 
-const(
+const (
 	END = iota
 )
 
@@ -43,7 +43,7 @@ func NewScanner(source string) *Scanner {
 func (scanner *Scanner) Current() byte {
 	//fmt.Printf("last pos: %v  current pos: %v buffer size : %v", scanner.lastPos, scanner.pos, len(scanner.src))
 	if len(scanner.src) <= 0 || scanner.pos >= len(scanner.src) {
-	//	fmt.Println("current: END")
+		//	fmt.Println("current: END")
 		return 0
 	}
 	//fmt.Printf(" current: %v\n", string(scanner.src[scanner.pos]))
@@ -51,17 +51,17 @@ func (scanner *Scanner) Current() byte {
 }
 
 func (scanner *Scanner) LookAhead() byte {
-	if scanner.pos >= len(scanner.src) - 1 {
+	if scanner.pos >= len(scanner.src)-1 {
 		return END
 	}
 	return scanner.src[scanner.pos+1]
 }
 
-func (scanner *Scanner) Tokens() []Token{
+func (scanner *Scanner) Tokens() []Token {
 	tokens := []Token{}
-	for ;;{
+	for {
 		tok := scanner.NextToken()
-		if tok.Type == INVALID{
+		if tok.Type == INVALID {
 			break
 		}
 		tokens = append(tokens, *tok)
@@ -74,7 +74,7 @@ func (scanner *Scanner) NextToken() *Token {
 	for {
 		current := scanner.Current()
 		if isDigital(current) {
-			if !isDigital(scanner.LookAhead()) && !isDot(scanner.LookAhead()){
+			if !isDigital(scanner.LookAhead()) && !isDot(scanner.LookAhead()) {
 				return scanner.next(NUMBER)
 			}
 		} else if isOp(current) {
@@ -85,22 +85,22 @@ func (scanner *Scanner) NextToken() *Token {
 			if !isAlpha(scanner.LookAhead()) {
 				return scanner.next(WORD)
 			}
-		}else if isDot(current) {
+		} else if isDot(current) {
 			scanner.GoAhead()
 			continue
-		}else if isBlank(current){
+		} else if isBlank(current) {
 			scanner.skip()
 			continue
-		}else if isLeftMark(current){
+		} else if isLeftMark(current) {
 			return scanner.next(LEFT)
-		}else if isRightMark(current){
+		} else if isRightMark(current) {
 			return scanner.next(RIGHT)
-		}else if isEnd(current){
+		} else if isEnd(current) {
 			break
-		}else{
+		} else {
 			panic("not support")
 		}
-		
+
 		scanner.GoAhead()
 
 	}
@@ -115,20 +115,20 @@ func (scanner *Scanner) GoAhead() byte {
 	return scanner.src[scanner.pos]
 }
 
-func (scanner *Scanner) next(t int) *Token{
-	
-	token := &Token{scanner.src[scanner.lastPos : scanner.pos +1], t}
+func (scanner *Scanner) next(t int) *Token {
+
+	token := &Token{scanner.src[scanner.lastPos : scanner.pos+1], t}
 	scanner.GoAhead()
 	scanner.lastPos = scanner.pos
 	return token
 }
 
-func (scanner *Scanner) skip(){
+func (scanner *Scanner) skip() {
 	scanner.GoAhead()
 	scanner.lastPos = scanner.lastPos + 1
 }
 
-func (token *Token) ToString() string{
+func (token *Token) ToString() string {
 	return fmt.Sprintf("token : %v -> type : %v", string(token.Value), token.Type)
 }
 

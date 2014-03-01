@@ -11,27 +11,27 @@ func Parse(tokens []Token) *Node {
 	root = current
 	for _, token := range tokens {
 
-		if token.Type == OP || isAssign(token){
+		if token.Type == OP || isAssign(token) {
 			current.root = token
-		} else if token.Type == NUMBER || token.Type == LEFT || token.Type == WORD{
+		} else if token.Type == NUMBER || token.Type == LEFT || token.Type == WORD {
 			if count == 0 {
 				continue
 			}
 			child := new(Node)
 			if current.left == nil {
 				current.left = child
-			} else if current.right == nil{
+			} else if current.right == nil {
 				current.right = child
-			}else{
+			} else {
 				newRoot := new(Node)
 				newRoot.left = current
-				if current == root{
+				if current == root {
 					root = newRoot
 				}
-				if current.parent != nil{
-					if current == current.parent.left{
+				if current.parent != nil {
+					if current == current.parent.left {
 						current.parent.left = newRoot
-					}else if current == current.parent.right{
+					} else if current == current.parent.right {
 						current.parent.right = newRoot
 					}
 					newRoot.parent = current.parent
@@ -39,7 +39,7 @@ func Parse(tokens []Token) *Node {
 				}
 				//copy the op
 				newRoot.root = current.root
-			
+
 				current = newRoot
 				current.right = child
 			}
@@ -114,12 +114,12 @@ func Gen(ast *Node) string {
 		result = "_var" + string(var_i)
 		fmt.Println(op, left, right, result)
 		return result
-	}else if isAssign(ast.root){
+	} else if isAssign(ast.root) {
 		fmt.Println("=", string(ast.left.root.Value), string(ast.right.root.Value), result)
 	}
 	return string(ast.root.Value)
 }
 
-func isAssign(token Token) bool{
+func isAssign(token Token) bool {
 	return token.Type == WORD && string(token.Value) == "setf"
 }

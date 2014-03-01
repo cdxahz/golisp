@@ -18,7 +18,7 @@ func TestParse(t *testing.T) {
 	ast := Parse(tokens)
 	PrintAst(ast)
 
-	if string(ast.root.Value) != "*"{
+	if string(ast.root.Value) != "*" {
 		t.Fail()
 	}
 	fmt.Println()

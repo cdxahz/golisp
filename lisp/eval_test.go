@@ -1,11 +1,11 @@
 package lisp
 
-import(
-	"testing"
+import (
 	"fmt"
+	"testing"
 )
 
-func TestEval(t *testing.T){
+func TestEval(t *testing.T) {
 	source := "(* 5 (- 10 (+ 1 2)))"
 
 	scanner := NewScanner(source)
@@ -13,7 +13,7 @@ func TestEval(t *testing.T){
 
 	fmt.Println("test eval :", Eval(ast))
 
-	if Eval(ast) != 35{
+	if Eval(ast) != 35 {
 		t.Fail()
 	}
 }

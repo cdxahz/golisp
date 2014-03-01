@@ -1,11 +1,11 @@
 package lisp
 
-import(
-	"testing"
+import (
 	"fmt"
+	"testing"
 )
 
-func TestAssign(t *testing.T){
+func TestAssign(t *testing.T) {
 	source := "(setf abc 123)"
 
 	scanner := NewScanner(source)
@@ -15,11 +15,11 @@ func TestAssign(t *testing.T){
 	fmt.Println("test setf:", Gen(ast))
 	fmt.Println("test eval setf:", Eval(ast))
 
-	if string(ast.root.Value) != "setf"{
+	if string(ast.root.Value) != "setf" {
 		t.Fail()
 	}
 
-	if string(ast.left.root.Value) != "abc"{
+	if string(ast.left.root.Value) != "abc" {
 		t.Fail()
 	}
 }

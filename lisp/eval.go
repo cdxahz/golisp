@@ -1,13 +1,13 @@
 package lisp
 
-import(
+import (
 	"fmt"
 )
 
-var table map[string] interface{}
+var table map[string]interface{}
 
 func Eval(ast *Node) int {
-	var op []byte 
+	var op []byte
 	var left, right, result int
 	if ast == nil {
 		panic("invalid ast")
@@ -38,15 +38,15 @@ func Eval(ast *Node) int {
 		}
 		result = eval(string(op), left, right)
 		return result
-	}else if isAssign(ast.root){
+	} else if isAssign(ast.root) {
 		AddToTable(string(ast.left.root.Value), toInt(ast.right.root.Value))
 		return toInt(ast.right.root.Value)
 	}
 	return toInt(ast.root.Value)
 }
 
-func eval(op string, left, right int) int{
-	switch{
+func eval(op string, left, right int) int {
+	switch {
 	case op == "+":
 		return left + right
 	case op == "-":
@@ -60,18 +60,18 @@ func eval(op string, left, right int) int{
 	panic("not supported op " + string(op))
 }
 
-func toInt(val []byte) int{
+func toInt(val []byte) int {
 	result := 0
-	for _, v := range val{
+	for _, v := range val {
 		factor := 10
-		result = result * factor + int(v - '0')
+		result = result*factor + int(v-'0')
 	}
 	return int(result)
 }
 
 func AddToTable(key string, v interface{}) {
-	if table == nil{
-		table = make(map[string] interface{})	
+	if table == nil {
+		table = make(map[string]interface{})
 	}
 
 	table[key] = v
@@ -79,8 +79,8 @@ func AddToTable(key string, v interface{}) {
 
 func PrintTable() {
 	fmt.Println("[print the table info]:")
-	if table != nil{
-		for key, value := range table{
+	if table != nil {
+		for key, value := range table {
 			fmt.Println(key, " = ", value)
 		}
 	}
