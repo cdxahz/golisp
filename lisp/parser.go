@@ -9,9 +9,10 @@ func Parse(tokens []Token) *Node {
 	count := 0
 	current = new(Node)
 	root = current
-	for _, token := range tokens {
+    for i := 0; i < len(tokens); i++ {
+        token := tokens[i]
 
-		if token.Type == OP || isAssign(token) {
+        if token.Type == OP || isAssign(token) {
 			current.root = token
 		} else if token.Type == NUMBER || token.Type == LEFT || token.Type == WORD {
 			if count == 0 {
@@ -122,4 +123,8 @@ func Gen(ast *Node) string {
 
 func isAssign(token Token) bool {
 	return token.Type == WORD && string(token.Value) == "setf"
+}
+
+func isDefun(token Token) bool{
+    return token.Type == WORD && string(token.Value) == "defun"
 }

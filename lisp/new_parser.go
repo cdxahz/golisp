@@ -10,20 +10,15 @@ const(
     MAX_ARGS = 10
 )
 
-type Node interface{
-    evaluate() interface{}
-    toString() string
-}
-
-type Expression struct{
-    op Token
-    targets []Token
+type Node struct{
+    Op Token
+    Targets []Node
 }
 
 type Function struct{
     name string
     args []Token
-    expression *Expression
+    expression *Node
 }
 
 func NewParser(tokens []Token) *Parser{
@@ -32,14 +27,6 @@ func NewParser(tokens []Token) *Parser{
         nil,
         0,
     }
-}
-
-func (parser *Parser) parse(){
-
-}
-
-func (parser *Parser) evaluate(){
-
 }
 
 func (parser *Parser) nextToken() Token{
@@ -91,22 +78,46 @@ func (parser *Parser) matchArgs() []Token{
     return nodes
 }
 
-func (parser *Parser) matchExpression() *Expression{
-    parser.match("(")
-    op := parser.matchOp()
-    tokens := make([]Token, MAX_ARGS)
-    for{
-        token := parser.nextToken()
-        if string(token.Value) != ")"{
-            tokens = append(tokens, token)
+func (parser *Parser) matchExpression() *Node{
+    tokens := make([]Node, MAX_ARGS)
+    stepOne := parser.lookForward()
+    if string(stepOne.Value) == "("{
+        parser.match("(")
+        if parser.lookForward().Type == OP{
+            return &Node{
+                parser.matchOp(),
+                parser.matchExpressions(),
+            }
+        }else if parser.lookForward().Type == WORD{
+            return  &Node{
+                Token{},
+                append(tokens, Node{parser.nextToken(), []Node{},}),
+            }
         }else{
-            break
+            parser.match(")")
+        }
+    }else{
+        return &Node{
+            Token{[]byte("="), OP,},
+            append(tokens, Node{parser.nextToken(), []Node{}}),
         }
     }
-    return &Expression{
-        op,
-        tokens,
+    panic("invalid expression match")
+}
+
+func (parser *Parser) matchExpressions() []Node{
+    expressions := make([]Node, 0)
+    for {
+        if parser.lookForward().Value == nil{
+            return expressions
+        }
+        expressions = append(expressions, *parser.matchExpression())
     }
+    return expressions
+}
+
+func (parser *Parser) lookForward() Token{
+    return parser.tokens[parser.current + 1] 
 }
 
 func (parser *Parser) matchOp() Token{
