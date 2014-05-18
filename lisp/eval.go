@@ -1,5 +1,5 @@
 package lisp
-
+/*
 import (
 	"fmt"
 )
@@ -164,3 +164,4 @@ func PrintTable() {
 		}
 	}
 }
+*/

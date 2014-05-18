@@ -4,3 +4,4 @@
 (/ (- 10 (* 2 3)) 2)
 (setf a 1.0)
 (setf abc 2)
+(defun add (a b) (+ a b))
