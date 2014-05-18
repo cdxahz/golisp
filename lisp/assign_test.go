@@ -9,7 +9,7 @@ func TestAssign(t *testing.T) {
 	source := "(setf abc 123)"
 
 	scanner := NewScanner(source)
-    parser := NewParser(scanner.Tokens())
+	parser := NewParser(scanner.Tokens())
 	ast := parser.Parse()
 
 	fmt.Println("test setf:", Gen(ast))

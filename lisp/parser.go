@@ -1,7 +1,7 @@
 package lisp
 
-import(
-    "fmt"
+import (
+	"fmt"
 )
 
 type Parser struct {
@@ -46,15 +46,15 @@ func (parser *Parser) MatchFunction() *Function {
 			args := parser.matchArgs()
 			expression, _ := parser.MatchExpression()
 			parser.match(")")
-            function := &Function{
-                functionName,
-                args,
-                expression,
-            }
-            AddToTable(functionName, function)
+			function := &Function{
+				functionName,
+				args,
+				expression,
+			}
+			AddToTable(functionName, function)
 			return function
-	    }
-    } else {
+		}
+	} else {
 		panic("invalid function")
 	}
 
@@ -89,23 +89,23 @@ func (parser *Parser) matchArgs() []Token {
 	return nodes
 }
 
-func (parser *Parser) Parse() *Node{
-    if node, ok := parser.MatchExpression(); ok{
-        return node
-    }
-    return nil
+func (parser *Parser) Parse() *Node {
+	if node, ok := parser.MatchExpression(); ok {
+		return node
+	}
+	return nil
 }
 
 func (parser *Parser) MatchExpression() (*Node, bool) {
 	stepOne := parser.lookForward()
 	if string(stepOne.Value) == "(" {
 		parser.match("(")
-        var op Token
-        if parser.lookForward().Type == OP{
-            op = parser.matchOp()
-        }else{
-            op, _ = parser.nextToken()
-        }
+		var op Token
+		if parser.lookForward().Type == OP {
+			op = parser.matchOp()
+		} else {
+			op, _ = parser.nextToken()
+		}
 		return &Node{
 			op,
 			parser.MatchExpressions(),
@@ -168,10 +168,10 @@ func (parser *Parser) matchOp() Token {
 
 func Visit(node *Node, depth int) {
 	if node != nil && node.Op.Value != nil {
-        for i := 0; i < depth; i++{
-            fmt.Print("\t")
-        }
-        fmt.Println("=>", node.Op.ToString())
+		for i := 0; i < depth; i++ {
+			fmt.Print("\t")
+		}
+		fmt.Println("=>", node.Op.ToString())
 	}
 
 	for _, item := range node.Targets {

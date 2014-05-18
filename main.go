@@ -2,11 +2,11 @@ package main
 
 import (
 	"./lisp"
-	"fmt"
-    "os"
-	"flag"
 	"bufio"
-    "strings"
+	"flag"
+	"fmt"
+	"os"
+	"strings"
 )
 
 var file = flag.String("file", "sample.lisp", "help message for file")
@@ -28,34 +28,34 @@ func main() {
 	parser_exp := lisp.NewParser(expression)
 	exp, _ := parser_exp.MatchExpression()
 	lisp.Gen(exp)
-    fmt.Println(lisp.Eval(exp))
+	fmt.Println(lisp.Eval(exp))
 
-    flag.Parse()
+	flag.Parse()
 	f, err := os.Open(*file)
 	defer f.Close()
 
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
 	reader := bufio.NewReader(f)
 	for {
 		line, _, _ := reader.ReadLine()
-		if len(line) <= 0{
+		if len(line) <= 0 {
 			break
 		}
 		scanner := lisp.NewScanner(string(line))
-        parser = lisp.NewParser(scanner.Tokens())
-        if strings.Contains(string(line), "defun"){
-            ast := parser.MatchFunction()
-            fmt.Println(string(line), " => \n function :", ast.Name, ", args:", ast.Args, ", tree:")
-            lisp.Visit(ast.Expression, 0)
-        }else{
-		    ast,_ := parser.MatchExpression()
-		    fmt.Println(string(line), " = ", lisp.Eval(ast))
-        }
+		parser = lisp.NewParser(scanner.Tokens())
+		if strings.Contains(string(line), "defun") {
+			ast := parser.MatchFunction()
+			fmt.Println(string(line), " => \n function :", ast.Name, ", args:", ast.Args, ", tree:")
+			lisp.Visit(ast.Expression, 0)
+		} else {
+			ast, _ := parser.MatchExpression()
+			fmt.Println(string(line), " = ", lisp.Eval(ast))
+		}
 	}
 
 	lisp.PrintTable()
-    
+
 }
