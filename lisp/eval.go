@@ -1,6 +1,6 @@
 package lisp
 
-/*
+
 import (
 	"fmt"
 )
@@ -44,42 +44,47 @@ var table map[string]interface{}
 
 func Eval(ast *Node) Number {
 	var op []byte
-	var left, right, result Number
+    var result, result_tmp Number
 	if ast == nil {
-		panic("invalid ast")
+		return ""
+	} else if len(ast.Targets) == 0 {
+		return 0
 	}
-	op = ast.root.Value
-	if ast.root.Type == OP {
-		if ast.left != nil {
-			if ast.left.root.Type == NUMBER {
-				left = toNumber(ast.left.root.Value)
-			} else if ast.left.root.Type == OP {
-				left = Eval(ast.left)
-			} else {
-				panic("not supported token type")
-			}
-		}
-		if ast.right != nil {
-			if ast.right.root.Type == NUMBER {
-				right = toNumber(ast.right.root.Value)
-			} else if ast.right.root.Type == OP {
-				right = Eval(ast.right)
-			} else {
-				panic("not supported token type")
-			}
+
+
+	if ast.Op.Type == OP {
+		op = ast.Op.Value
+		for i := 0; i < len(ast.Targets); i++ {
+            child := ast.Targets[i]
+            if i == 0 {
+                if child.Op.Type == NUMBER{
+                    result = toNumber(child.Op.Value)
+                }else{
+                    result = Eval(&child)
+                }
+                continue
+            }
+
+			if child.Op.Value != nil && child.Op.Type == NUMBER {
+                result_tmp = toNumber(child.Op.Value)
+				
+            }else if child.Op.Type == OP{
+                result_tmp = Eval(&child)
+            }else{
+                panic("not supported token type")
+            }
+            result = eval(string(op), result, result_tmp)
 		}
 
-		if var_i == 0 {
-			var_i = '0'
-		}
-		result = eval(string(op), left, right)
 		return result
-	} else if isAssign(ast.root) {
-		AddToTable(string(ast.left.root.Value), toNumber(ast.right.root.Value))
-		return toNumber(ast.right.root.Value)
+	} else {
+        //tmp process
+        AddToTable(string(ast.Targets[0].Op.Value), toNumber(ast.Targets[1].Op.Value))
+		return toNumber(ast.Targets[1].Op.Value)
 	}
-	return toNumber(ast.root.Value)
+	return toNumber(ast.Op.Value)
 }
+
 
 func eval(op string, left, right Number) Number {
 
@@ -165,4 +170,4 @@ func PrintTable() {
 		}
 	}
 }
-*/
+

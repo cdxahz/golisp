@@ -1,7 +1,7 @@
 package lisp
 
-import (
-	"fmt"
+import(
+    "fmt"
 )
 
 type Parser struct {
@@ -22,7 +22,6 @@ type Function struct {
 }
 
 func NewParser(tokens []Token) *Parser {
-	fmt.Println("len of tokens:", len(tokens))
 	return &Parser{
 		tokens,
 		nil,
@@ -33,7 +32,6 @@ func NewParser(tokens []Token) *Parser {
 func (parser *Parser) nextToken() (Token, bool) {
 	parser.current = parser.current + 1
 	if parser.current >= 0 && parser.current <= len(parser.tokens)-1 {
-		fmt.Println("next:", parser.tokens[parser.current].ToString())
 		token := parser.tokens[parser.current]
 		return token, true
 	} else {
@@ -48,14 +46,15 @@ func (parser *Parser) MatchFunction() *Function {
 			args := parser.matchArgs()
 			expression, _ := parser.MatchExpression()
 			parser.match(")")
-
-			return &Function{
-				functionName,
-				args,
-				expression,
-			}
-		}
-	} else {
+            function := &Function{
+                functionName,
+                args,
+                expression,
+            }
+            AddToTable(functionName, function)
+			return function
+	    }
+    } else {
 		panic("invalid function")
 	}
 
@@ -64,7 +63,6 @@ func (parser *Parser) MatchFunction() *Function {
 
 func (parser *Parser) match(toMatch string) (Token, bool) {
 	token, _ := parser.nextToken()
-	fmt.Println("matching:", token.ToString())
 	return token, string(token.Value) == toMatch
 }
 
@@ -91,11 +89,23 @@ func (parser *Parser) matchArgs() []Token {
 	return nodes
 }
 
+func (parser *Parser) Parse() *Node{
+    if node, ok := parser.MatchExpression(); ok{
+        return node
+    }
+    return nil
+}
+
 func (parser *Parser) MatchExpression() (*Node, bool) {
 	stepOne := parser.lookForward()
 	if string(stepOne.Value) == "(" {
 		parser.match("(")
-		op := parser.matchOp()
+        var op Token
+        if parser.lookForward().Type == OP{
+            op = parser.matchOp()
+        }else{
+            op, _ = parser.nextToken()
+        }
 		return &Node{
 			op,
 			parser.MatchExpressions(),
@@ -136,16 +146,13 @@ func (parser *Parser) lookForward() Token {
 		return Token{}
 	}
 	var token Token
-	fmt.Println("current index:", parser.current)
 	token = parser.tokens[parser.current+1]
-	fmt.Println("lookForward ", token.ToString())
 	return token
 }
 
 func (parser *Parser) matchType(toMatch int) (Token, bool) {
 	token, _ := parser.nextToken()
 	if token.Type == toMatch {
-		fmt.Println("matching ", token.ToString())
 		return token, true
 	} else {
 		panic("invalid type match")
@@ -161,7 +168,10 @@ func (parser *Parser) matchOp() Token {
 
 func Visit(node *Node, depth int) {
 	if node != nil && node.Op.Value != nil {
-		fmt.Println("depth:", depth, "->", node.Op.ToString())
+        for i := 0; i < depth; i++{
+            fmt.Print("\t")
+        }
+        fmt.Println("=>", node.Op.ToString())
 	}
 
 	for _, item := range node.Targets {

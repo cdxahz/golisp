@@ -15,10 +15,10 @@ func TestParse(t *testing.T) {
 		fmt.Println(token.ToString())
 	}
 
-	ast := Parse(tokens)
-	PrintAst(ast)
+	ast := NewParser(tokens).Parse()
+	Visit(ast, 0)
 
-	if string(ast.root.Value) != "*" {
+	if string(ast.Op.Value) != "*" {
 		t.Fail()
 	}
 	fmt.Println()

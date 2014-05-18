@@ -1,19 +1,18 @@
 package lisp
 
 import (
-	"../lisp"
 	"log"
 	"testing"
 )
 
-func TestParse(t *testing.T) {
-	scanner := lisp.NewScanner("(defun add (a b) (+ a b))")
+func TestParseFunction(t *testing.T) {
+	scanner := NewScanner("(defun add (a b) (+ a b))")
 	tokens := scanner.Tokens()
 	log.Println(tokens)
 	for _, token := range tokens {
 		log.Println(token.ToString())
 	}
-	parser := lisp.NewParser(tokens)
+	parser := NewParser(tokens)
 	function := parser.MatchFunction()
 	if function == nil {
 		t.Fail()
@@ -24,10 +23,9 @@ func TestParse(t *testing.T) {
 	}
 	visit(function.Expression)
 
-	panic("show")
 }
 
-func visit(node *lisp.Node) {
+func visit(node *Node) {
 	if node == nil {
 		return
 	}

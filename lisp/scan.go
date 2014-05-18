@@ -98,7 +98,7 @@ func (scanner *Scanner) NextToken() *Token {
 		} else if isEnd(current) {
 			break
 		} else {
-			panic("not support")
+			panic("not support" + string(current))
 		}
 
 		scanner.GoAhead()

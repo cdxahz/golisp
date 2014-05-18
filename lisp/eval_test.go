@@ -9,7 +9,8 @@ func TestEval(t *testing.T) {
 	source := "(* 5 (- 10 (+ 1 2)))"
 
 	scanner := NewScanner(source)
-	ast := Parse(scanner.Tokens())
+    parser := NewParser(scanner.Tokens())
+	ast := parser.Parse()
 
 	fmt.Println("test eval :", Eval(ast))
 
