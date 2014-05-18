@@ -1,4 +1,5 @@
 package lisp
+
 /*
 import (
 	"fmt"
@@ -129,7 +130,7 @@ func toFloat(val []byte) float64{
                 result = result*factor + float64(v-'0')
             }else {
                 result = result + float64(v-'0') * factor
-            }  
+            }
         }else{
             factor = 0.1
         }

@@ -136,26 +136,26 @@ func isDigital(ch byte) bool {
 	return ch >= '0' && ch <= '9'
 }
 
-func isNumber(value []byte) bool{
-    for _, ch := range value{
-        if !isDigital(ch) && !isDot(ch){
-            return false
-        }
-    }
-    return true
+func isNumber(value []byte) bool {
+	for _, ch := range value {
+		if !isDigital(ch) && !isDot(ch) {
+			return false
+		}
+	}
+	return true
 }
 
-func isInt(value []byte) bool{
-    for _, ch := range value{
-        if !isDigital(ch){
-            return false
-        }
-    }
-    return true
+func isInt(value []byte) bool {
+	for _, ch := range value {
+		if !isDigital(ch) {
+			return false
+		}
+	}
+	return true
 }
 
-func isFloat(value []byte) bool{
-    return isNumber(value) && !isInt(value)
+func isFloat(value []byte) bool {
+	return isNumber(value) && !isInt(value)
 }
 
 func isOp(ch byte) bool {
